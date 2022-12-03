@@ -3,9 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {NavbarComponent} from "./navbar/navbar.component";
+import {HeaderComponent} from "./header/header.component";
 import { RecipesComponent } from './recipes/recipes.component';
-import { RecipesListComponent } from './recipes/recipes-list/recipes-list.component';
+import { RecipesListComponent } from './recipes/recipe-list/recipes-list.component';
 import { RecipesDetailComponent } from './recipes/recipes-detail/recipes-detail.component';
 import { RecipesItemComponent } from './recipes/recipe-list/recipes-item/recipes-item.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
@@ -14,7 +14,7 @@ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-ed
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
+    HeaderComponent,
     RecipesComponent,
     RecipesListComponent,
     RecipesDetailComponent,

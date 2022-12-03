@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
+  defaultSelectedOption: string = 'recipe';
+  headerOptionSelected(selectedOption: string) {
+    this.defaultSelectedOption = selectedOption;
+  }
 }

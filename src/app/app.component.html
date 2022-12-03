@@ -1,5 +1,5 @@
-<app-navbar></app-navbar>
+<app-header (headerOptionSelected) = "headerOptionSelected($event)"></app-header>
 <div class="container">
-  <app-recipes></app-recipes>
-  <app-shopping-list></app-shopping-list>
+  <app-recipes *ngIf="defaultSelectedOption === 'recipes'"></app-recipes>
+  <app-shopping-list *ngIf="defaultSelectedOption !== 'recipes'"></app-shopping-list>
 </div>

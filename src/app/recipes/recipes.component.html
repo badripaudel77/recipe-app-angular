@@ -1,12 +1,15 @@
 <div class="row">
   <!-- small row 5/12 -->
   <div class="col-md-5">
-    <app-recipes-list></app-recipes-list>
+    <app-recipes-list (recipeSelected) = "onRecipeItemsDetailsNeeded($event)"></app-recipes-list>
   </div>
 
   <!-- larger column 7/12 -->
   <div class="col-md-7">
-    <app-recipes-detail></app-recipes-detail>
+    <app-recipes-detail *ngIf="selectedRecipeWithDetails; else pleaseSelectRecipe" [recipeItem]="selectedRecipeWithDetails"></app-recipes-detail>
+    <ng-template #pleaseSelectRecipe>
+       <h4>Please Select The Recipe !</h4>
+    </ng-template>
   </div>
 
 </div>
