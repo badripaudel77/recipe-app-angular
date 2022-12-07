@@ -1,18 +1,18 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Ng Recipe</a>
+      <a class="navbar-brand">Ng Recipe</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#" (click)="onHeaderOptionClicked('recipes')">Recipes</a></li>
-      <li><a href="#" (click)="onHeaderOptionClicked('shoppingList')">Shopping List</a></li>
+      <li routerLinkActive="active" routerLink="/recipes"><a style="cursor: pointer;">Recipes</a></li>
+      <li routerLinkActive="active" routerLink="/shopping-list"><a style="cursor: pointer;">Shopping List</a></li>
     </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" appDropdownMenu>
-          <a href="#" class="dropdown-toggle"><span class="glyphicon glyphicon-circle-arrow-down" role="button"></span> Manage</a>
+        <li class="dropdown" appDropdownMenu style="cursor: pointer;">
+          <a class="dropdown-toggle"><span class="glyphicon glyphicon-circle-arrow-down" role="button"></span> Manage</a>
           <ul class="dropdown-menu">
-            <li><a href="#">Fetch</a></li>
-            <li><a href="#">Save</a></li>
+            <li><a>Fetch</a></li>
+            <li><a>Save</a></li>
           </ul>
         </li>
       </ul>

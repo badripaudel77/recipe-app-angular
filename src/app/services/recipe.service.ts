@@ -24,4 +24,9 @@ export class RecipeService {
   public getRecipes() {
      return this.recipes.slice(); // return the copy of the array as arrays are reference type.
   }
+
+  public getSingleRecipe(recipeIndex: number): RecipeModel {
+     // return this.recipes.slice()[recipeId]; // index
+     return this.recipes[recipeIndex]; // index
+  }
 }

@@ -16,11 +16,10 @@
   <div class="col-xs-12">
     <div class="button-group" appDropdownMenu>
       <button type="button" class="btn btn-primary dropdown-toggle">Manage Recipe<span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <li><a (click)="toShoppingList()"
-        style="cursor: pointer;">To Shopping List</a></li> <!-- sends these ingredients to shopping list -->
-      <li><a href="#">Edit Recipe</a></li>
-      <li><a href="#">Delete Recipe</a></li>
+    <ul class="dropdown-menu" style="cursor: pointer">
+      <li><a (click)="toShoppingList()">To Shopping List</a></li> <!-- sends these ingredients to shopping list -->
+      <li><a (click)="editRecipe(recipe)">Edit Recipe</a></li>
+      <li><a>Delete Recipe</a></li>
     </ul>
   </div>
   </div>
