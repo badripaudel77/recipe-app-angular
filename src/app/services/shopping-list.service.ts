@@ -1,12 +1,20 @@
-import {EventEmitter, Injectable} from "@angular/core";
+import { Injectable} from "@angular/core";
 import {IngredientModel} from "../common/Ingredient.model";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
+
+/**
+ * Replace EventEmitter with Subject for cross component interaction.
+ * for @Output() we still need EventEmitter
+ *
+ */
+
 export class ShoppingListService {
 
-  ingredientsChanged = new EventEmitter<IngredientModel[]>();
+  ingredientsChanged = new Subject<IngredientModel[]>();
 
   private ingredients: IngredientModel [] = [
     new IngredientModel('Noodles', 12),
@@ -20,12 +28,12 @@ export class ShoppingListService {
 
   addIngredient(addedIngredient: IngredientModel) {
     this.ingredients.push(addedIngredient); // pushing to original array
-    this.ingredientsChanged.emit(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
+    this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
   }
 
   // Add ingredients coming from the
   addIngredients(addedIngredients: IngredientModel[]) {
     this.ingredients.push(...addedIngredients);
-    this.ingredientsChanged.emit(this.ingredients.slice());
+    this.ingredientsChanged.next(this.ingredients.slice());
   }
 }

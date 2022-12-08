@@ -19,6 +19,7 @@ const routes: Routes = [
     ]
   },// parent route : /recipes
   { path: 'shopping-list', component: ShoppingListComponent }, // /shopping-list
+  { path: '**', redirectTo: '/recipes' }, // to /recipes if no path matches
 ];
 
 @NgModule({
