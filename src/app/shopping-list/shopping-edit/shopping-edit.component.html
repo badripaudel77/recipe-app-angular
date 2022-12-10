@@ -41,8 +41,8 @@
         <div class="col-xs-12 btn-group">
           <button class="btn btn-success" type="button"
                   (click)="onIngredientAdd(shoppingForm)" [disabled]="!shoppingForm.valid">{{ editMode ? 'Update' : 'Add' }}</button>
-          <button class="btn btn-danger">Delete</button>
-          <button class="btn btn-warning">Clear</button>
+          <button class="btn btn-danger" *ngIf="editMode" (click)="deleteIngredient(itemIndex)">Delete</button>
+          <button class="btn btn-warning" (click)="clearForm()">Clear</button>
         </div>
       </div>
     </form>
