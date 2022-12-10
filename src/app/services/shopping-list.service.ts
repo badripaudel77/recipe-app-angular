@@ -15,6 +15,7 @@ import {Subject} from "rxjs";
 export class ShoppingListService {
 
   ingredientsChanged = new Subject<IngredientModel[]>();
+  shoppingEditIndex = new Subject<number>();
 
   private ingredients: IngredientModel [] = [
     new IngredientModel('Noodles', 12),
@@ -26,8 +27,17 @@ export class ShoppingListService {
     return this.ingredients.slice(); // returning the copy of the array
   }
 
+  getIngredient(index: number) {
+    return this.ingredients[index];
+  }
+
   addIngredient(addedIngredient: IngredientModel) {
     this.ingredients.push(addedIngredient); // pushing to original array
+    this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
+  }
+
+  updateIngredient(index: number, updatedIngredient: IngredientModel) {
+    this.ingredients[index] = updatedIngredient;
     this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
   }
 

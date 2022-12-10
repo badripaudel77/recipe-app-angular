@@ -32,4 +32,12 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     this.ingredientsChangedSubscription.unsubscribe();
   }
 
+  /**
+   * @param index
+   * Pass on index to the Subject so that we can listen to it wherever required using shoppingListService.
+   */
+  editItem(index: number) {
+    this.shoppingListService.shoppingEditIndex.next(index);
+  }
+
 }
