@@ -1,7 +1,83 @@
-<div *ngIf="editMode">
-  <h4>Edit your recipe with ID:  {{recipeId}}</h4>
+<div *ngIf="editMode" class="alert alert-warning">
+  <h4>Edit your recipe</h4>
 </div>
-<div *ngIf="!editMode">
+<div *ngIf="!editMode" class="alert alert-success">
   <h4>Add new Recipe</h4>
 </div>
-<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="recipeForm">
+      <div class="row-sm-5 form-group">
+        <label for="name">Recipe Name : </label>
+        <input type="text" id="name" class="form-control" required
+               name="name" [formControlName]="'name'">
+      </div>
+      <div class="row-sm-5 form-group">
+        <label for="imagePath">Recipe Image URL : </label>
+        <input type="text" id="imagePath" class="form-control" required
+               name="imagePath" formControlName="imagePath" #imagePath>
+<!--        <div class="alert alert-danger">-->
+<!--          Image Path is Required-->
+<!--        </div>-->
+      </div>
+
+      <div class="row" style="width: 300px;">
+        <div class="col-xs-12" >
+          <div class="alert alert-success">
+            Preview the Image &nbsp; <span class="glyphicon glyphicon-circle-arrow-down"></span>
+          </div>
+          <img src="{{imagePath.value}}" [title]="'Photo of Recipe'"
+               alt="recipe" class="img-responsive">
+        </div>
+      </div>
+      <div class="row-sm-5 form-group">
+        <label for="description">About Recipe : </label>
+        <textarea type="text" id="description" class="form-control" required
+                  name="recipeDesc" formControlName="description" rows="4"></textarea>
+        <!--        <div class="alert alert-danger">-->
+        <!--          Recipe Description is required-->
+        <!--        </div>-->
+      </div>
+      <!-- ingredients section -->
+      <div class="row">
+        <div class="col-xs-12" formArrayName="ingredients">
+          <div class="row" *ngFor="let ingredientControl of controls; let i = index"
+               [formGroupName]="i" style="margin-top: 5px;">
+            <div class="col-xs-7">
+              <input type="text" name="name" class="form-control" placeholder="name" formControlName="name">
+            </div>
+            <div class="col-xs-3">
+              <input type="number" placeholder="Quantity"  name="amount" class="form-control" formControlName="amount">
+            </div>
+            <div class="col-xs-2">
+              <button type="button" class="form-control btn btn-warning" (click)="onRemoveIngredientInput(i)">X</button>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 7px;">
+            <div class="col-xs-12">
+              <button type="button" class="btn btn-inline btn-primary" (click)="addIngredientToRecipe()">Add More Ingredient</button>
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+      <!-- ingredients section -->
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="alert alert-danger" *ngIf="recipeForm.invalid && (recipeForm.touched || recipeForm.dirty)">
+            <h5>Overall Form Status Is Invalid. Please fill all the fields correctly.</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 btn btn-group">
+          <button type="button" class="btn btn-success"
+                  [disabled]="!recipeForm.valid" (click)= "onFormSave()">Save</button>
+          <button type="button" class="btn btn-danger" (click)="cancelAddRecipe()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
