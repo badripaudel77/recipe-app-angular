@@ -1,9 +1,8 @@
 import { Injectable} from "@angular/core";
 import {IngredientModel} from "../common/Ingredient.model";
-import {Observable, Subject} from "rxjs";
+import {Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {APP_CONSTANTS} from "../constants/app.constants";
-import RecipeModel from "../recipes/models/Recipe.model";
 
 @Injectable({
   providedIn: 'root'
@@ -36,34 +35,30 @@ export class ShoppingListService {
 
   addIngredient(addedIngredient: IngredientModel) {
     this.ingredients.push(addedIngredient); // pushing to original array
-    this.updateIngredients().subscribe((data) => {
-        this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
-      },
-      error => {
-       window.alert(error.error.error);
-      });
+    this.updateIngredients();
   }
 
   updateIngredient(index: number, updatedIngredient: IngredientModel) {
     this.ingredients[index] = updatedIngredient;
-    this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
+    //this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
+    this.updateIngredients();
   }
 
   // Add ingredients coming from the
   addIngredients(addedIngredients: IngredientModel[]) {
     this.ingredients.push(...addedIngredients);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.updateIngredients();
   }
 
   deleteIngredient(index: number) {
     this.ingredients.splice(index,1);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.updateIngredients();
   }
 
   getIngredientsFromServer() {
      this.http.get<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`)
       .subscribe((data) => {
-        this.ingredients = data;
+        this.ingredients = data ? data : [];
         this.ingredientsChanged.next(this.ingredients.slice())
       })
   }
@@ -71,7 +66,19 @@ export class ShoppingListService {
   updateIngredients() {
     let allIngredients: IngredientModel[] = this.getIngredients();
     // returns observable.
-     return this.http.put<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`, allIngredients);
-  }
+     return this.http.put<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`, allIngredients)
+       .subscribe((data) => {
+         if(data && data.length > 0) {
+           this.ingredients = data;
+         }
+         else {
+           this.ingredients = [];
+         }
+         this.ingredientsChanged.next(this.ingredients.slice());
+       },
+         error => {
+           window.alert(error.error.error);
+         });
+    }
 
 }

@@ -13,8 +13,13 @@ import {IngredientModel} from "../common/Ingredient.model";
 })
 export class SortIngredientsByName implements PipeTransform {
   transform(ingredients: IngredientModel[], property:string = 'name'): IngredientModel[] {
+    if(!ingredients) {
+      return;
+    }
     return ingredients.sort((a, b) => {
-      return a[property].localeCompare(b[property]);
+      if(a && b) {
+        return a[property].localeCompare(b[property]);
+      }
     });
   }
 }
