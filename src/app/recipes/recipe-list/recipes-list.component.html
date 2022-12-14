@@ -10,10 +10,10 @@
 
 </app-recipes-item>
 
-<div class="row" *ngIf="!recipes.length">
+<div class="row" *ngIf="recipes && !recipes.length">
   <div class="col-xs-12">
     <div class="alert alert-warning">
-      <h4>No items found here, please add few recipes.</h4>
+      <p>No items found here, please add few recipes here and save from the menu or fetch recipes from server.</p>
     </div>
   </div>
 </div>

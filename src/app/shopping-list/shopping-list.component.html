@@ -9,7 +9,7 @@
         <span>{{ingredient.name}} ({{ ingredient.amount }})</span>
       </a>
     </ul>
-    <div class="row" style="margin-top: 15px" *ngIf="!ingredients.length">
+    <div class="row" style="margin-top: 15px" *ngIf="ingredients && !ingredients.length">
       <div class="col-xs-12 alert alert-warning">
         No Ingredients found, please add some !
       </div>

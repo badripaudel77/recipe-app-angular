@@ -11,8 +11,8 @@
         <li class="dropdown" appDropdownMenu style="cursor: pointer;">
           <a class="dropdown-toggle"><span class="glyphicon glyphicon-circle-arrow-down" role="button"></span> Manage</a>
           <ul class="dropdown-menu">
-            <li><a>Fetch</a></li>
-            <li><a>Save</a></li>
+            <li (click)="fetchDataFromServer()"><a>Fetch Recipes From server</a></li>
+            <li (click)="saveData()"><a>Save added recipes</a></li>
           </ul>
         </li>
       </ul>

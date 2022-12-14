@@ -1,6 +1,9 @@
 import { Injectable} from "@angular/core";
 import {IngredientModel} from "../common/Ingredient.model";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {APP_CONSTANTS} from "../constants/app.constants";
+import RecipeModel from "../recipes/models/Recipe.model";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +12,6 @@ import {Subject} from "rxjs";
 /**
  * Replace EventEmitter with Subject for cross component interaction.
  * for @Output() we still need EventEmitter
- *
  */
 
 export class ShoppingListService {
@@ -17,13 +19,14 @@ export class ShoppingListService {
   ingredientsChanged = new Subject<IngredientModel[]>();
   shoppingEditIndex = new Subject<number>();
 
-  private ingredients: IngredientModel [] = [
-    new IngredientModel('Noodles', 12),
-    new IngredientModel('Flour', 2),
-    new IngredientModel('Tomatoes', 10),
-  ];
+  private ingredients: IngredientModel [] = [];
+
+  constructor(private http: HttpClient) {
+
+  }
 
   public getIngredients() {
+    this.getIngredientsFromServer();
     return this.ingredients.slice(); // returning the copy of the array
   }
 
@@ -33,7 +36,12 @@ export class ShoppingListService {
 
   addIngredient(addedIngredient: IngredientModel) {
     this.ingredients.push(addedIngredient); // pushing to original array
-    this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
+    this.updateIngredients().subscribe((data) => {
+        this.ingredientsChanged.next(this.ingredients.slice()); // emitted from here, ingredientsChanged can be listened to and subscribe.
+      },
+      error => {
+       window.alert(error.error.error);
+      });
   }
 
   updateIngredient(index: number, updatedIngredient: IngredientModel) {
@@ -51,4 +59,19 @@ export class ShoppingListService {
     this.ingredients.splice(index,1);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
+
+  getIngredientsFromServer() {
+     this.http.get<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`)
+      .subscribe((data) => {
+        this.ingredients = data;
+        this.ingredientsChanged.next(this.ingredients.slice())
+      })
+  }
+
+  updateIngredients() {
+    let allIngredients: IngredientModel[] = this.getIngredients();
+    // returns observable.
+     return this.http.put<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`, allIngredients);
+  }
+
 }

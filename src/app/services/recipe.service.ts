@@ -1,7 +1,8 @@
 import { Injectable} from "@angular/core";
 import RecipeModel from "../recipes/models/Recipe.model";
-import {IngredientModel} from "../common/Ingredient.model";
 import {Subject} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {APP_CONSTANTS} from "../constants/app.constants";
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,10 @@ export class RecipeService {
   // recipeSelected = new Subject<RecipeModel>();
   recipesChanged = new Subject<RecipeModel[]>();
 
-  private recipes: RecipeModel[] = [
-    new RecipeModel('Default recipe',
-      'About default recipe',
-      'https://images.pexels.com/photos/1109197/pexels-photo-1109197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      [new IngredientModel('Default IG 1', 5), new IngredientModel('Default IG 2', 3)])
-  ];
+  constructor(private http: HttpClient) {
+  }
+
+  private recipes: RecipeModel[] = [];
 
   public getRecipes() {
      return this.recipes.slice(); // return the copy of the array as arrays are reference type.
@@ -50,5 +49,24 @@ export class RecipeService {
   deleteRecipe(index: number) {
     this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
+  }
+
+  /*
+    * Firebase overwrites the existing data by new data that is passed as [new data] if put request is sent.
+    * recipes.json [.json is required for firebase to work, recipes will be the name of the folder]
+  */
+  saveRecipes() {
+    let allRecipes: RecipeModel[] = this.getRecipes();
+    return this.http.put<RecipeModel>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`, allRecipes); // returns observable.
+  }
+
+  fetchDataFromServer() {
+     this.http.get<RecipeModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
+      .subscribe((data) => {
+       this.recipes = data;
+       this.recipesChanged.next(this.recipes.slice());
+      }, (error) => {
+        alert("Error : " + error.getMessage());
+        });
   }
 }

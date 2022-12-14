@@ -17,6 +17,7 @@ import { NoRecipeSelectedComponent } from './recipes/no-recipe-selected/no-recip
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SortIngredientsByName} from "./pipes/sort-by-alphabet.pipe";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SortIngredientsByName} from "./pipes/sort-by-alphabet.pipe";
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [RecipeService, ShoppingListService],
   bootstrap: [AppComponent]
