@@ -5,6 +5,7 @@ import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
 import {NoRecipeSelectedComponent} from "./recipes/no-recipe-selected/no-recipe-selected.component";
 import {RecipesDetailComponent} from "./recipes/recipes-detail/recipes-detail.component";
 import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
+import {AuthenticationComponent} from "./authentication/authentication.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: "full" },
@@ -19,6 +20,7 @@ const routes: Routes = [
     ]
   },// parent route : /recipes
   { path: 'shopping-list', component: ShoppingListComponent }, // /shopping-list
+  { path: 'auth', component: AuthenticationComponent }, // /auth-route
   { path: '**', redirectTo: '/recipes' }, // to /recipes if no path matches
 ];
 

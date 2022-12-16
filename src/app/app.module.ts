@@ -17,7 +17,9 @@ import { NoRecipeSelectedComponent } from './recipes/no-recipe-selected/no-recip
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SortIngredientsByName} from "./pipes/sort-by-alphabet.pipe";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthenticationComponent} from "./authentication/authentication.component";
+import {AuthInterceptor} from "./interceptors/auth-interceptor";
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import {HttpClientModule} from "@angular/common/http";
     DropdownDirective,
     NoRecipeSelectedComponent,
     RecipeEditComponent,
+    AuthenticationComponent,
     SortIngredientsByName
   ],
   imports: [
@@ -41,7 +44,13 @@ import {HttpClientModule} from "@angular/common/http";
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [RecipeService, ShoppingListService],
+  providers: [RecipeService, ShoppingListService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

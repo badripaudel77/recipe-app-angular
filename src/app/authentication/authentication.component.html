@@ -1,0 +1,39 @@
+<div *ngIf="isLoading" class="requestProcessing">
+    <i class="fa fa-spinner fa-pulse"></i>
+</div>
+
+<form name="authForm" #authForm="ngForm" (ngSubmit)="submitAuthForm(authForm)" class="authForm" [hidden]="isLoading">
+  <div class="row">
+    <h5 *ngIf="errorMessage" class="alert alert-danger"> {{ errorMessage }}</h5>
+    <h5 style="color: blueviolet;">Provide Username and Password first to {{loginMode ? 'login' : 'sign up'}}</h5>
+    <hr>
+    <div class="row-sm-5 form-group">
+      <label for="userEmail">Email</label>
+      <input type="userEmail" id="userEmail" class="form-control" required
+             name="userEmail" ngModel #userEmail="ngModel">
+      <div class="alert alert-danger" [hidden]="userEmail.valid || userEmail.pristine">
+        Valid Email is required.
+      </div>
+    </div>
+    <div class="row-sm-2 form-group">
+      <label for="userPassword">Password</label>
+      <input type="password" id="userPassword" class="form-control" min="1"
+             name="userPassword" minlength="6" required ngModel #userPassword="ngModel">
+      <div class="alert alert-danger" [hidden]="userPassword.untouched || userPassword.valid">
+        Password is required.
+      </div>
+    </div>
+    <div>
+      <div class="alert alert-warning" *ngIf="!authForm.valid && authForm.touched && authForm.dirty">
+        All fields are mandatory.
+      </div>
+    </div>
+    <br>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">{{ loginMode ? 'Login' : 'Sign up' }}</button> &nbsp; &nbsp;
+      <button class="btn btn-warning" type="button" (click)="switchAuthMode()">{{ !loginMode ? 'Login' : 'Sign up' }}</button>
+    </div>
+  </div>
+</form>

@@ -1,8 +1,9 @@
 import { Injectable} from "@angular/core";
 import RecipeModel from "../recipes/models/Recipe.model";
-import {Subject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {exhaustMap, Subject, take} from "rxjs";
+import {HttpClient, HttpHeaderResponse, HttpParams} from "@angular/common/http";
 import {APP_CONSTANTS} from "../constants/app.constants";
+import {AuthenticationService} from "./authentication.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class RecipeService {
   // recipeSelected = new Subject<RecipeModel>();
   recipesChanged = new Subject<RecipeModel[]>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
   }
 
   private recipes: RecipeModel[] = [];
@@ -57,16 +58,27 @@ export class RecipeService {
   */
   saveRecipes() {
     let allRecipes: RecipeModel[] = this.getRecipes();
-    return this.http.put<RecipeModel>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`, allRecipes); // returns observable.
+    return this.http.put<RecipeModel>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`, allRecipes);
   }
 
   fetchDataFromServer() {
-     this.http.get<RecipeModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
-      .subscribe((data) => {
-       this.recipes = data;
-       this.recipesChanged.next(this.recipes.slice());
-      }, (error) => {
-        alert("Error : " + error.getMessage());
-        });
+    /**
+     *     needs to retrieve auth state of user and send it to the backend, take(1)
+     *     only takes one value from the observable
+     *     and unsubscribe as it is needed only time. Same as unsubscribing immediately
+     *     exhaustMap() waits for the first observable to complete
+     *     We can also use interceptors to send headers.
+     */
+
+    // one observable inside of another, as we have to wait few time to complete and user in needed in another observable.
+    this.authenticationService.userSubject.subscribe((user) => {
+      this.http.get<RecipeModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
+          .subscribe((data) => {
+            this.recipes = data;
+            this.recipesChanged.next(this.recipes.slice());
+          }, (error) => {
+            alert("Error : " + error.error.error);
+          })
+    });
   }
 }

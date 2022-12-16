@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Subscription} from "rxjs";
 import {RecipeService} from "../services/recipe.service";
+import {AuthenticationService} from "../services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   templateUrl: './header.component.html',
@@ -8,11 +10,14 @@ import {RecipeService} from "../services/recipe.service";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
+  isAuthenticated: boolean = false;
 
-  constructor(private recipeService: RecipeService) { }
+  constructor(private recipeService: RecipeService, private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit(): void {
-
+    this.subscription = this.authenticationService.userSubject.subscribe((user) => {
+      this.isAuthenticated = user ? true : false;
+    });
   }
 
   saveData() {
@@ -30,4 +35,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   fetchDataFromServer() {
     this.recipeService.fetchDataFromServer();
   }
+
+    logout() {
+      this.authenticationService.logoutUser();
+    }
 }

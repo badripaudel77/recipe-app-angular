@@ -1,0 +1,12 @@
+.requestProcessing {
+ text-align: center;
+ font-size: 100px;
+ color: blueviolet;
+}
+
+.authForm {
+ max-width: 500px;
+ margin: auto;
+ padding: 30px;
+ background: ghostwhite;
+}

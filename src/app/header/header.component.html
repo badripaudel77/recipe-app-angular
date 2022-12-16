@@ -4,11 +4,15 @@
       <a class="navbar-brand">Ng Recipe</a>
     </div>
     <ul class="nav navbar-nav">
-      <li routerLinkActive="active" routerLink="/recipes"><a style="cursor: pointer;">Recipes</a></li>
-      <li routerLinkActive="active" routerLink="/shopping-list"><a style="cursor: pointer;">Shopping List</a></li>
+      <li routerLinkActive="active" routerLink="/auth" *ngIf="!isAuthenticated"><a style="cursor: pointer;">Authenticate</a></li>
+      <li routerLinkActive="active" routerLink="/recipes" *ngIf="isAuthenticated"><a style="cursor: pointer;">Recipes</a></li>
+      <li routerLinkActive="active" routerLink="/shopping-list" *ngIf="isAuthenticated"><a style="cursor: pointer;">Shopping List</a></li>
     </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" appDropdownMenu style="cursor: pointer;">
+        <li *ngIf="isAuthenticated">
+          <a style="cursor: pointer;" (click)="logout()">Logout &nbsp;<i class="fa fa-sign-out"></i></a>
+        </li>
+        <li class="dropdown" appDropdownMenu style="cursor: pointer;" *ngIf="isAuthenticated">
           <a class="dropdown-toggle"><span class="glyphicon glyphicon-circle-arrow-down" role="button"></span> Manage</a>
           <ul class="dropdown-menu">
             <li (click)="fetchDataFromServer()"><a>Fetch Recipes From server</a></li>
