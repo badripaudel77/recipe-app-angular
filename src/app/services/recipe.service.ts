@@ -1,9 +1,9 @@
 import { Injectable} from "@angular/core";
 import RecipeModel from "../recipes/models/Recipe.model";
-import {exhaustMap, Subject, take} from "rxjs";
-import {HttpClient, HttpHeaderResponse, HttpParams} from "@angular/common/http";
-import {APP_CONSTANTS} from "../constants/app.constants";
-import {AuthenticationService} from "./authentication.service";
+import { Subject } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { AuthenticationService } from "./authentication.service";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class RecipeService {
 
   // recipeSelected = new Subject<RecipeModel>();
   recipesChanged = new Subject<RecipeModel[]>();
+  APP_CONSTANTS = environment;
 
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
   }
@@ -58,7 +59,7 @@ export class RecipeService {
   */
   saveRecipes() {
     let allRecipes: RecipeModel[] = this.getRecipes();
-    return this.http.put<RecipeModel>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`, allRecipes);
+    return this.http.put<RecipeModel>(`${this.APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`, allRecipes);
   }
 
   fetchDataFromServer() {
@@ -68,17 +69,18 @@ export class RecipeService {
      *     and unsubscribe as it is needed only time. Same as unsubscribing immediately
      *     exhaustMap() waits for the first observable to complete
      *     We can also use interceptors to send headers.
+     *     Higher order mapping : https://blog.angular-university.io/rxjs-higher-order-mapping/
      */
 
     // one observable inside of another, as we have to wait few time to complete and user in needed in another observable.
     this.authenticationService.userSubject.subscribe((user) => {
-      this.http.get<RecipeModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
+      this.http.get<RecipeModel[]>(`${this.APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
           .subscribe((data) => {
             this.recipes = data;
             this.recipesChanged.next(this.recipes.slice());
           }, (error) => {
             alert("Error : " + error.error.error);
-          })
+          });
     });
   }
 }

@@ -1,4 +1,3 @@
-import {APP_CONSTANTS} from "../constants/app.constants";
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {Observable, catchError, throwError, Subject, BehaviorSubject} from "rxjs";
@@ -7,6 +6,7 @@ import {NgForm} from "@angular/forms";
 import {AuthResponseDataModel} from "../models/auth-response-data.model";
 import {CustomerUserModel} from "../models/customer-user.model";
 import {Router} from "@angular/router";
+import {environment} from "../../environments/environment";
 
 /**
  * Firebase Authentication
@@ -16,9 +16,11 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthenticationService {
-  FIREBASE_SIGNUP_URL = APP_CONSTANTS.FIREBASE_SIGNUP_URL;
-  FIREBASE_SIGNIN_URL = APP_CONSTANTS.FIREBASE_SIGNIN_URL;
-  FIREBASE_AUTH_API_KEY = APP_CONSTANTS.FIREBASE_AUTH_API_KEY;
+  APP_CONSTANTS = environment;
+
+  FIREBASE_SIGNUP_URL = this.APP_CONSTANTS.FIREBASE_SIGNUP_URL;
+  FIREBASE_SIGNIN_URL = this.APP_CONSTANTS.FIREBASE_SIGNIN_URL;
+  FIREBASE_AUTH_API_KEY = this.APP_CONSTANTS.FIREBASE_AUTH_API_KEY;
 
   //userSubject = new Subject<CustomerUserModel>(); // we can emit this when we login or logout etc.
 

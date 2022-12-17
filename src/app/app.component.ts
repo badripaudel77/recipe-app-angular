@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, isDevMode, OnInit} from '@angular/core';
 import {AuthenticationService} from "./services/authentication.service";
 
 @Component({
@@ -11,6 +11,12 @@ export class AppComponent implements OnInit{
 
   }
   ngOnInit(): void {
+    if(isDevMode()){
+      console.info("[** App is running in development mode **]");
+    }
+    else {
+      console.info("[** App is running in production mode **]");
+    }
     this.authenticationService.detectAutoLogin();
   }
 

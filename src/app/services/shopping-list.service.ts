@@ -2,7 +2,7 @@ import { Injectable} from "@angular/core";
 import {IngredientModel} from "../common/Ingredient.model";
 import {Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {APP_CONSTANTS} from "../constants/app.constants";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,8 @@ export class ShoppingListService {
   shoppingEditIndex = new Subject<number>();
 
   private ingredients: IngredientModel [] = [];
+
+  APP_CONSTANTS = environment;
 
   constructor(private http: HttpClient) {
 
@@ -46,8 +48,10 @@ export class ShoppingListService {
 
   // Add ingredients coming from the
   addIngredients(addedIngredients: IngredientModel[]) {
-    this.ingredients.push(...addedIngredients);
-    this.updateIngredients();
+    if(addedIngredients.length>0) {
+        this.ingredients.push(...addedIngredients);
+        this.updateIngredients();
+    }
   }
 
   deleteIngredient(index: number) {
@@ -56,7 +60,7 @@ export class ShoppingListService {
   }
 
   getIngredientsFromServer() {
-     this.http.get<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`)
+     this.http.get<IngredientModel[]>(`${this.APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`)
       .subscribe((data) => {
         this.ingredients = data ? data : [];
         this.ingredientsChanged.next(this.ingredients.slice())
@@ -66,7 +70,7 @@ export class ShoppingListService {
   updateIngredients() {
     let allIngredients: IngredientModel[] = this.getIngredients();
     // returns observable.
-     return this.http.put<IngredientModel[]>(`${APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`, allIngredients)
+     return this.http.put<IngredientModel[]>(`${this.APP_CONSTANTS.FIREBASE_BASE_URL}/ingredients.json`, allIngredients)
        .subscribe((data) => {
          if(data && data.length > 0) {
            this.ingredients = data;

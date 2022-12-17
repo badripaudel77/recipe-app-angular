@@ -1,9 +1,8 @@
 /**
- * Firebase Database REST API
- * Using firebase endpoints https://firebase.google.com/docs/reference/rest/database
+ * Define app constants here if needed.
  */
 const APP_CONSTANTS = {
-  FIREBASE_BASE_URL : 'https://ng-app-e6a4b-default-rtdb.firebaseio.com'
+  // TODO : TO be added if any ...
 }
 
 export { APP_CONSTANTS };
