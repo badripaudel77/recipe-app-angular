@@ -1,3 +1,9 @@
+<!-- show alert dialog message. -->
+<app-alert-dialog *ngIf="logoutAlertMessage && triggerAlertDialog"
+                  [alertMessage]="logoutAlertMessage"
+                  (logoutDecision)="onLogoutHandle($event)">
+</app-alert-dialog>
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -10,7 +16,7 @@
     </ul>
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="isAuthenticated">
-          <a style="cursor: pointer;" (click)="logout()">Logout &nbsp;<i class="fa fa-sign-out"></i></a>
+          <a style="cursor: pointer;" (click)="showAlertDialog()">Logout &nbsp;<i class="fa fa-sign-out"></i></a>
         </li>
         <li class="dropdown" appDropdownMenu style="cursor: pointer;" *ngIf="isAuthenticated">
           <a class="dropdown-toggle"><span class="glyphicon glyphicon-circle-arrow-down" role="button"></span> Manage</a>

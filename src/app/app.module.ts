@@ -20,6 +20,7 @@ import { SortIngredientsByName} from "./pipes/sort-by-alphabet.pipe";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthenticationComponent} from "./authentication/authentication.component";
 import {AuthInterceptor} from "./interceptors/auth-interceptor";
+import {AlertComponent} from "./common/alert-dialog/alert.component";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {AuthInterceptor} from "./interceptors/auth-interceptor";
     NoRecipeSelectedComponent,
     RecipeEditComponent,
     AuthenticationComponent,
+    AlertComponent,
     SortIngredientsByName
   ],
   imports: [

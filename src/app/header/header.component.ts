@@ -11,6 +11,8 @@ import {Router} from "@angular/router";
 export class HeaderComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   isAuthenticated: boolean = false;
+  triggerAlertDialog : boolean = false;
+  logoutAlertMessage: string = '';
 
   constructor(private recipeService: RecipeService, private authenticationService: AuthenticationService, private router: Router) { }
 
@@ -36,7 +38,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.recipeService.fetchDataFromServer();
   }
 
-    logout() {
+  logout() {
       this.authenticationService.logoutUser();
-    }
+  }
+
+  showAlertDialog() {
+    this.triggerAlertDialog = true;
+    this.logoutAlertMessage = "Are you sure to log out ? ";
+  }
+
+  onLogoutHandle($event: boolean) {
+   if($event === true) {
+     this.logout();
+     this.dismissAlertDialog();
+   }
+   else {
+     this.dismissAlertDialog();
+   }
+  }
+
+  private dismissAlertDialog() {
+    this.triggerAlertDialog = false;
+    this.logoutAlertMessage = '';
+  }
 }

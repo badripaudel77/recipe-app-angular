@@ -1,0 +1,11 @@
+<div class="backdrop" (click)="closeAlertDialog()"></div>
+<!--<div class="backdrop" (click)="closeAlertDialog()"> [if dismiss on clicking background]</div>-->
+
+<div class="alert-dialog-box">
+    <h4> {{ message }}</h4>
+    <hr>
+    <div class="alert-dialog-box-actions">
+        <button class="btn btn-warning" (click)="closeAlertDialog()">Close</button>
+        <button class="btn btn-success" (click)="logout()">Yes</button>
+    </div>
+</div>
