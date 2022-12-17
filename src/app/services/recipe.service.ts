@@ -1,6 +1,6 @@
 import { Injectable} from "@angular/core";
 import RecipeModel from "../recipes/models/Recipe.model";
-import { Subject } from "rxjs";
+import {Subject, take} from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { environment } from "../../environments/environment";
@@ -73,7 +73,7 @@ export class RecipeService {
      */
 
     // one observable inside of another, as we have to wait few time to complete and user in needed in another observable.
-    this.authenticationService.userSubject.subscribe((user) => {
+    this.authenticationService.userSubject.pipe(take(1)).subscribe((user) => {
       this.http.get<RecipeModel[]>(`${this.APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
           .subscribe((data) => {
             this.recipes = data;
