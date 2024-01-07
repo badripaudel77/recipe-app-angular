@@ -49,12 +49,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogoutHandle($event: boolean) {
    if($event === true) {
-     this.logout();
-     this.dismissAlertDialog();
+      this.logout();
    }
-   else {
-     this.dismissAlertDialog();
-   }
+   this.dismissAlertDialog();
   }
 
   private dismissAlertDialog() {
