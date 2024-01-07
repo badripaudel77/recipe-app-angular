@@ -14,6 +14,7 @@ const routes: Routes = [
     path: 'recipes',
     component: RecipesComponent,
     canActivate: [AuthGuard],
+    // Children components need => <router-outlet></router-outlet> where they (children components) will be displayed in UI
     children: [
       { path: '', component: NoRecipeSelectedComponent }, // /recipes/, /recipes
       { path: 'add', component: RecipeEditComponent }, // /recipes/add
