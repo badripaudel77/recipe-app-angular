@@ -11,6 +11,7 @@ import {environment} from "../../environments/environment";
 /**
  * Firebase Authentication
  * REF docs : https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
+ * Firebase Auth Rest API : https://firebase.google.com/docs/reference/rest/auth
  */
 @Injectable({
   providedIn: 'root'
@@ -26,12 +27,12 @@ export class AuthenticationService {
 
   /**
    * gives access to the previously emitted value even if not subscribed yet.
-   * this can be subscribe too
+   * this can be subscribed too
    */
   userSubject = new BehaviorSubject<CustomerUserModel>(null);
   token : string = null;
   private timer : any;
-  
+
   constructor(private http: HttpClient, private router: Router) {
   }
 
@@ -48,7 +49,7 @@ export class AuthenticationService {
     .pipe(catchError(this.handleError), tap((response:AuthResponseDataModel) => {
       /**
        * expiresIn [in response obj] string    The number of seconds in which the ID token expires, needs to convert to data.
-       * new Date().getTime(); current timestamp in millisec
+       * new Date().getTime(); current timestamp in milli sec
         */
       this.handleAuthentication(response.email, response.localId, response.idToken, Number(response.expiresIn));
     }));
@@ -80,6 +81,10 @@ export class AuthenticationService {
   private handleAuthentication(email: string, localId: string, idToken: string, seconds: number) {
     const expiresIn = new Date(new Date().getTime() + seconds * 1000);
     const user = new CustomerUserModel(email, localId, idToken, expiresIn);
+    /**
+     * Let's emit user to those who have subscribed to userSubject of the AuthenticationService.
+     * It is an observable, so can be subscribed.
+     */
     this.userSubject.next(user);
     this.detectAutoLogout(seconds * 1000);
     // store token to the localstorage

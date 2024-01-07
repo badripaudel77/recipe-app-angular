@@ -5,6 +5,8 @@ import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { environment } from "../../environments/environment";
 
+import { map } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -65,6 +67,8 @@ export class RecipeService {
   fetchDataFromServer() {
     /**
      *     needs to retrieve auth state of user and send it to the backend, take(1)
+     *     take(1) means only subscribe to the observable once and unsubscribe it. Next time this fetchDataFromServer is called,
+     *     do the same.
      *     only takes one value from the observable
      *     and unsubscribe as it is needed only time. Same as unsubscribing immediately
      *     exhaustMap() waits for the first observable to complete
@@ -72,9 +76,13 @@ export class RecipeService {
      *     Higher order mapping : https://blog.angular-university.io/rxjs-higher-order-mapping/
      */
 
-    // one observable inside of another, as we have to wait few time to complete and user in needed in another observable.
     this.authenticationService.userSubject.pipe(take(1)).subscribe((user) => {
       this.http.get<RecipeModel[]>(`${this.APP_CONSTANTS.FIREBASE_BASE_URL}/recipes.json`)
+        .pipe(map( recipes  => {
+           return recipes.map(recipe => {
+            return { ... recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] }
+            })
+        }))
           .subscribe((data) => {
             this.recipes = data;
             this.recipesChanged.next(this.recipes.slice());
